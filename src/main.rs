@@ -55,7 +55,7 @@ impl Plugin for CanvasPlugin {
         let settings = app.world.resource_mut::<CanvasSettings>();
 
         let descriptor = WindowDescriptor {
-            canvas_element: Some(Canvas::OffscreenCanvas(settings.offscreen_canvas.clone())),
+            canvas: Some(Canvas::OffscreenCanvas(settings.offscreen_canvas.clone())),
             ..default()
         };
 
