@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      canvas {
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="mycanvas" width="1280" height="768"></canvas>
+    <script>
+      const myWorker = new Worker('worker.js');
+      const canvas = document.getElementById('mycanvas');
+      if (canvas) {
+        const offscreen = canvas.transferControlToOffscreen();
+        myWorker.onmessage = (_event) => {
+          myWorker.postMessage(offscreen, [offscreen]);
+        };
+      } else {
+        console.error("Can't find canvas!");
+      }
+    </script>
+  </body>
+</html>
