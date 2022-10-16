@@ -10,9 +10,8 @@ use bevy::{
     scene::ScenePlugin,
     sprite::SpritePlugin,
     time::TimePlugin,
-    window::{Canvas, WindowId, WindowPlugin},
+    window::{WindowId, WindowPlugin},
 };
-use raw_window_handle::{RawWindowHandle, WebHandle};
 use wasm_bindgen::prelude::*;
 use web_sys::OffscreenCanvas;
 
@@ -53,21 +52,14 @@ impl Plugin for CanvasPlugin {
     fn build(&self, app: &mut App) {
         bevy::log::debug!("CanvasPlugin::build");
         let settings = app.world.resource_mut::<CanvasSettings>();
-
-        let descriptor = WindowDescriptor {
-            canvas: Some(Canvas::OffscreenCanvas(settings.offscreen_canvas.clone())),
-            ..default()
-        };
+        let canvas = settings.offscreen_canvas.clone();
 
         let mut windows = app.world.resource_mut::<bevy::window::Windows>();
-        windows.add(Window::new(
+        windows.add(Window::new_offscreen_canvas(
             WindowId::primary(),
-            &descriptor,
-            1280,
-            768,
+            &WindowDescriptor::default(),
+            canvas,
             1.0,
-            None,
-            RawWindowHandle::Web(WebHandle::empty()),
         ));
     }
 }
